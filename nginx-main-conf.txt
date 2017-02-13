@@ -1,0 +1,104 @@
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+
+geo $notabot {
+default 1;
+#google
+64.233.160.0/19 0;
+65.52.0.0/14 0;
+66.102.0.0/20 0;
+66.249.64.0/19 0;
+72.14.192.0/18 0;
+74.125.0.0/16 0;
+209.85.128.0/17 0;
+216.239.32.0/19 0;
+#M$
+64.4.0.0/18 0;
+157.60.0.0/16 0;
+157.54.0.0/15 0;
+157.56.0.0/14 0;
+207.46.0.0/16 0;
+207.68.192.0/20 0;
+207.68.128.0/18 0;
+#yahoo
+8.12.144.0/24 0;
+66.196.64.0/18 0;
+66.228.160.0/19 0;
+67.195.0.0/16 0;
+74.6.0.0/16 0;
+68.142.192.0/18 0;
+72.30.0.0/16 0;
+209.191.64.0/18 0;
+
+} 
+
+    override_charset off;
+    server_tokens off;
+    charset off;
+    client_body_buffer_size  1K;
+    client_header_buffer_size 1k;
+    client_max_body_size 2M;
+    large_client_header_buffers 2 2k;
+    client_body_timeout 10;
+    client_header_timeout 10;
+    send_timeout 10;
+    limit_conn_zone $binary_remote_addr zone=default:10m;
+    limit_zone limit_per_ip $binary_remote_addr 1m;
+    limit_conn limit_per_ip 15;
+    limit_conn default 10;
+    limit_req_zone $binary_remote_addr zone=notabot:5m rate=200r/s;
+    limit_req zone=notabot burst=200 nodelay;
+
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format  ltsv  'time:$time_local\t'
+                      'host:$remote_addr\t'
+                      'user:$remote_user\t'
+                      'req:$request\t'
+                      'status:$status\t'
+                      'size:$body_bytes_sent\t'
+                      'referer:$http_referer\t'
+                      'ua:$http_user_agent\t'
+                      'forwardedfor:$http_x_forwarded_for';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    error_page	404	/404.html;
+    error_page	403	/403.html;
+    error_page	405	/405.html;
+    error_page	500 502 503 504 /50x.html;
+    
+    index index.html index.htm index.php;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    gzip  on;
+    gzip_disable "msie6";
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*.conf;
+}

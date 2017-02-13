@@ -1,0 +1,38 @@
+server {
+	server_name .example.com;
+	root   /www/example.com;
+        limit_conn default 10;
+
+    if ( $http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen) )
+     {
+         # return 404;
+         return 403;
+     }
+     ## Block download agents ##
+     if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+            return 403;
+     }
+     ##
+     ## Block some robots ##
+     if ($http_user_agent ~* msnbot|scrapbot) {
+            return 403;
+     }
+
+    location / {
+        root   /www/example.com;
+        index  index.php index.html index.htm;
+    }
+
+    location ~ ^/(403|404|405|50x).html {
+        root   /www/example.com;
+    }
+
+    location ~ \.php$ {
+        root   /www/example.com;
+	index  index.php index.html index.htm;
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
