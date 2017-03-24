@@ -188,19 +188,15 @@ clear
 
 echo -e "\n";
 echo "====== Nginx + PHP-FPM + FileManager Successfully installed";
-echo "====== SFTP Username is sutorimu";
+echo "====== SFTP Username is nginx";
 echo "====== SFTP Password is ${pass2}";
 echo "====== Website document root is /www/files/yourdomain";
 echo "====== FileManager Username is sutorimu";
 echo "====== FileManager Password is ${pass2}";
 echo -e "\n";
 echo "====== Now you can visit http://`hostname -i`/";
-echo "====== phpMyAdmin: http://`hostname -i`:2084";
 echo "====== FileManager: http://`hostname -i`:3083";
 echo -e "\n";
 echo "====== https://www.facebook.com/Jhansito18";
 echo "====== Very Thank Everybody in Sutorimu Group";
-echo "====== Wait for system restart";
-reboot;
-exit;
 #Ending script
