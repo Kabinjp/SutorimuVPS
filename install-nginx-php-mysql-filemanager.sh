@@ -163,12 +163,12 @@ clear
         echo "-------------| _____________________________________________ |--------------";
         echo "----------------------------------------------------------------------------";
 echo -e "\n";
-wget --no-check-certificate https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/phpMyAdmin-4.6.6-all-languages.zip;
+#wget --no-check-certificate https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/phpMyAdmin-4.6.6-all-languages.zip;
 wget --no-check-certificate https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/FileManager.zip;
 
-unzip phpMyAdmin-4.6.6-all-languages.zip;
-rm -f phpMyAdmin-4.6.6-all-languages.zip;
-mv phpMyAdmin-4.6.6-all-languages phpmyadmin.hosutingu.gq;
+#unzip phpMyAdmin-4.6.6-all-languages.zip;
+#rm -f phpMyAdmin-4.6.6-all-languages.zip;
+#mv phpMyAdmin-4.6.6-all-languages phpmyadmin.hosutingu.gq;
 
 unzip FileManager.zip;
 rm -f FileManager.zip;
@@ -179,7 +179,7 @@ chown -R nginx:nginx /www;
 chmod -R 777 /www/files;
 #chmod +x -R /www/files/ip.com;
 chmod 777 /var/lib/php/session/;
-rm -Rf phpmyadmin.hosutingu.gq;
+#rm -Rf phpmyadmin.hosutingu.gq;
 
 clear
         echo "----------------------------------------------------------------------------";
