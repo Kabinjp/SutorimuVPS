@@ -175,7 +175,7 @@ rm -f FileManager.zip;
 sed -i "s/SUTORIMUVPSPASSWORD/${pass2}/g" /www/index.php;
 
 echo nginx:"${pass2}" | chpasswd;
-#chown -R sutorimu:sutorimu /www/files;
+chown -R nginx:nginx /www;
 chmod -R 777 /www/files;
 #chmod +x -R /www/files/ip.com;
 chmod 777 /var/lib/php/session/;
