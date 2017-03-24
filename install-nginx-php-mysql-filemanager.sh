@@ -179,6 +179,7 @@ chown -R nginx:nginx /www;
 chmod -R 777 /www/files;
 #chmod +x -R /www/files/ip.com;
 chmod 777 /var/lib/php/session/;
+rm -Rf phpmyadmin.hosutingu.gq;
 
 clear
         echo "----------------------------------------------------------------------------";
