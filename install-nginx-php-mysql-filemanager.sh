@@ -45,7 +45,7 @@ if [ "$arch" = "x86_64" ]; then
 fi
 
 
-#useradd sutorimu --home-dir=/www/files;
+useradd nginx --home-dir=/www;
 
 clear
         echo "----------------------------------------------------------------------------";
