@@ -3,6 +3,7 @@ fastcgi_cache_key "$scheme$request_method$host$request_uri";
 fastcgi_cache_use_stale updating error timeout invalid_header http_500;
 
 server {
+    listen   [::]:80 ipv6only=on; ## listen for ipv6
     server_name   ~^(www\.)?(?P<domain>.+)$;
     root           /www/files/$domain;
     include /etc/nginx/conf.d/my_domain;
