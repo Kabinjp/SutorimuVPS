@@ -96,7 +96,7 @@ wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https
 cat /etc/nginx/sites-available/virtualhost.conf;
 ln -s /etc/nginx/sites-available/virtualhost.conf /etc/nginx/sites-enabled/;
 
-wget --no-check-certificate -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-main-conf.txt;
+wget --no-check-certificate -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-php-config-cache.txt;
 
 wget --no-check-certificate -O /etc/nginx/conf.d/default.conf  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-default-conf.txt;
 
