@@ -100,11 +100,13 @@ wget --no-check-certificate -O /etc/nginx/nginx.conf https://raw.githubuserconte
 
 wget --no-check-certificate -O /etc/nginx/conf.d/default.conf  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-default-conf.txt;
 
-#wget --no-check-certificate -O /etc/nginx/conf.d/example.com.conf  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-custom-config-example.txt;
+wget --no-check-certificate -O /etc/nginx/proxy_params_common  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy-params-common.txt;
+wget --no-check-certificate -O /etc/nginx/proxy_params_dynamic  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy-params-dynamic.txt;
+wget --no-check-certificate -O /etc/nginx/proxy_params_static  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy-params-static.txt;
 
-wget --no-check-certificate -O /etc/nginx/conf.d/my_domain https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-my-domain-conf.txt;
+wget --no-check-certificate -O /etc/nginx/conf.d/my_domain https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/my-domain-config-varnish.txt;
 
-wget --no-check-certificate -O /etc/nginx/fastcgi_params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-fastcgi-conf.txt;
+wget --no-check-certificate -O /etc/nginx/fastcgi_params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/fastcgi-params-cache.txt;
 
 rm -f /etc/nginx/conf.d/example_ssl.conf;
 
