@@ -16,6 +16,7 @@ OS_MAJOR_VERSION=`sed -rn 's/.*([0-9])\.[0-9].*/\1/p' /etc/redhat-release`;
 OS_MINOR_VERSION=`sed -rn 's/.*[0-9].([0-9]).*/\1/p' /etc/redhat-release`;
 if [ "$arch" = "x86_64" ]; then
 	if [ "$OS_MAJOR_VERSION" = 6 ]; then
+	        yum -y install sudo;
 		rpm --import http://ftp.riken.jp/Linux/fedora/epel/RPM-GPG-KEY-EPEL-6;
 		rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm;
 		yum -y update epel-release;
@@ -29,6 +30,7 @@ if [ "$arch" = "x86_64" ]; then
 		cp -p /etc/yum.repos.d/nginx.repo /etc/yum.repos.d/nginx.repo.org;
 		sudo sed -i -e "s/enabled=1/enabled=0/g" /etc/yum.repos.d/nginx.repo;
 	else 
+	        yum -y install sudo;
 		rpm --import http://ftp.riken.jp/Linux/fedora/epel/RPM-GPG-KEY-EPEL-7;
 		rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/7/x86_64/e/epel-release-7-9.noarch.rpm;
 		yum -y --enablerepo=remi -y update epel-release;
@@ -55,7 +57,9 @@ clear
 echo -e "\n";
 # You may want remove first if your server is not a clean OS
 yum -y remove httpd nginx php php-* mysqld;
-
+yum -y install wget;
+yum -y install zip;
+yum -y install unzip;
 yum -y install yum-fastestmirror;
 
 yum -y --enablerepo=remi-php71,epel install php-fpm php-gd php-gmp php-ldap php-bcmath php-apc php-mbstring php-pspell php-tidy php-mcrypt php-opcache php-pdo php-pear php-pecl-apc php-process php-pear-MDB2-Driver-mysqli php-pecl-memcached php-pecl-msgpack php-xml php-litespeed php-pecl-varnish php-intl php-zip php-soap php-imap;
@@ -188,9 +192,7 @@ clear
         echo "----------------------------------------------------------------------------";
 
 echo -e "\n";
-echo "====== Nginx + PHP-FPM + FileManager Successfully installed";
-echo "====== SFTP Username is nginx";
-echo "====== SFTP Password is ${pass2}";
+echo "====== Nginx + PHP-FPM + FileManager + Varnish Successfully installed";
 echo "====== Website document root is /www/files/yourdomain";
 echo "====== FileManager Username is sutorimu";
 echo "====== FileManager Password is ${pass2}";
