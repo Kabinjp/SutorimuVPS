@@ -1,0 +1,193 @@
+user  nginx;
+worker_processes  auto;
+worker_rlimit_nofile 65535;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+        multi_accept on;
+        use epoll;
+        worker_connections 65535;
+}
+
+
+http {
+
+geo $notabot {
+default 1;
+#google
+64.233.160.0/19 0;
+65.52.0.0/14 0;
+66.102.0.0/20 0;
+66.249.64.0/19 0;
+72.14.192.0/18 0;
+74.125.0.0/16 0;
+209.85.128.0/17 0;
+216.239.32.0/19 0;
+#M$
+64.4.0.0/18 0;
+157.60.0.0/16 0;
+157.54.0.0/15 0;
+157.56.0.0/14 0;
+207.46.0.0/16 0;
+207.68.192.0/20 0;
+207.68.128.0/18 0;
+#yahoo
+8.12.144.0/24 0;
+66.196.64.0/18 0;
+66.228.160.0/19 0;
+67.195.0.0/16 0;
+74.6.0.0/16 0;
+68.142.192.0/18 0;
+72.30.0.0/16 0;
+209.191.64.0/18 0;
+
+} 
+
+ ## Basic Settings ##
+    client_body_buffer_size  128K;
+    client_body_timeout 30s; # Use 5s for high-traffic sites
+    client_header_timeout 30s; # Use 5s for high-traffic sites
+    client_max_body_size 1024m;
+    keepalive_timeout         20s;
+    port_in_redirect  off;
+    sendfile        on;
+    server_names_hash_bucket_size 512;
+    server_name_in_redirect  off;
+    server_tokens off;
+    tcp_nodelay  on;
+    tcp_nopush  on;
+    types_hash_max_size 2048;
+
+  ## DNS Resolver ##
+    resolver 8.8.8.8 8.8.4.4;
+
+  ## Real IP Forwarding ##
+    set_real_ip_from 127.0.0.1;
+
+  # CloudFlare IPs
+  # List from: https://www.cloudflare.com/ips-v4
+    set_real_ip_from 103.21.244.0/22;
+    set_real_ip_from 103.22.200.0/22;
+    set_real_ip_from 103.31.4.0/22;
+    set_real_ip_from 104.16.0.0/12;
+    set_real_ip_from 108.162.192.0/18;
+    set_real_ip_from 131.0.72.0/22;
+    set_real_ip_from 141.101.64.0/18;
+    set_real_ip_from 162.158.0.0/15;
+    set_real_ip_from 172.64.0.0/13;
+    set_real_ip_from 173.245.48.0/20;
+    set_real_ip_from 188.114.96.0/20;
+    set_real_ip_from 190.93.240.0/20;
+    set_real_ip_from 197.234.240.0/22;
+    set_real_ip_from 198.41.128.0/17;
+    set_real_ip_from 199.27.128.0/21;
+  # List from: https://www.cloudflare.com/ips-v6
+    set_real_ip_from 2400:cb00::/32;
+    set_real_ip_from 2405:8100::/32;
+    set_real_ip_from 2405:b500::/32;
+    set_real_ip_from 2606:4700::/32;
+    set_real_ip_from 2803:f800::/32;
+    set_real_ip_from 2c0f:f248::/32;
+    set_real_ip_from 2a06:98c0::/29;
+
+  # Replace with correct visitor IP
+    real_ip_header X-Forwarded-For;
+    real_ip_recursive on;
+
+    override_charset off;
+    charset off;
+    client_header_buffer_size 3m;
+    large_client_header_buffers 4 256k;
+    send_timeout 2;
+    server_names_hash_max_size 10240;
+    #proxy_read_timeout 1800s;
+    limit_conn_zone $binary_remote_addr zone=default:10m;
+    #limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
+    #limit_conn default 10;
+    limit_req_zone $binary_remote_addr zone=notabot:10m rate=5r/s;
+    #limit_req_zone $binary_remote_addr zone=req_limit_per_ip:10m rate=5r/s;
+    #limit_req zone=notabot burst=10 nodelay;
+
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    error_page	404	/404.html;
+    error_page	403	/403.html;
+    error_page	405	/405.html;
+    error_page	500 502 503 504 /50x.html;
+    
+    index index.html index.htm index.php;
+
+    # allow user agents to keep a connection open with us.;
+    #tcp_nopush     on;
+
+    keepalive_requests 100000;
+    #worker_rlimit_nofile    20000;
+    reset_timedout_connection on;
+    
+    disable_symlinks if_not_owner from=$document_root;
+    
+    # cache the open file descriptors
+    open_file_cache max=200000 inactive=20s;
+    open_file_cache_valid    30s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors   on;
+    
+    access_log off;
+
+    ## Gzip Settings ##
+    gzip on;
+    gzip_buffers 16 8k;
+    gzip_comp_level 5;
+    gzip_disable "msie6";
+    gzip_min_length 256;
+    gzip_proxied any;
+    gzip_types
+        application/atom+xml
+        application/javascript
+        application/json
+        application/ld+json
+        application/manifest+json
+        application/rss+xml
+        application/vnd.geo+json
+        application/vnd.ms-fontobject
+        application/x-font-ttf
+        application/x-javascript
+        application/x-web-app-manifest+json
+        application/xhtml+xml
+        application/xml
+        font/opentype
+        image/bmp
+        image/svg+xml
+        image/x-icon
+        text/cache-manifest
+        text/css
+        text/javascript
+        text/plain
+        text/vcard
+        text/vnd.rim.location.xloc
+        text/vtt
+        text/x-component
+        text/x-cross-domain-policy
+        text/x-js
+        text/xml;
+        gzip_vary on;
+
+
+    # Proxy Settings
+    proxy_cache_path /tmp/engintron_dynamic levels=1:2 keys_zone=engintron_dynamic:20m inactive=10m max_size=500m;
+    proxy_cache_path /tmp/engintron_static levels=1:2 keys_zone=engintron_static:20m inactive=10m max_size=500m;
+    proxy_temp_path /tmp/engintron_temp;
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*.conf;
+}
