@@ -5,8 +5,6 @@ fastcgi_cache_use_stale updating error timeout invalid_header http_500;
 server {
     listen   80; ## listen for ipv4
     listen   [::]:80 ipv6only=on; ## listen for ipv6
-    listen   443 ssl;
-    listen   [::]:443 ipv6only=on ssl;
     server_name   ~^(www\.)?(?P<domain>.+)$;
     root           /www/files/$domain;
     include /etc/nginx/conf.d/my_domain;
@@ -23,14 +21,9 @@ server {
      }
      ##
      ## Block some robots ##
-     if ($http_user_agent ~* msnbot|scrapbot) {
+     if ($http_user_agent ~* msnbot|scrapbot|curl|libwww-perl) {
             return 403;
      }
-
-
-    location / {
-        try_files $uri $uri/ /index.php$is_args$args;
-    }
 
     location ~ ^/(403|404|405|50x).html {
         root /www/files/ip.com/custom_error_page;
@@ -61,6 +54,7 @@ server {
 server {
     listen       3083;
     server_name ~^\d+\.\d+\.\d+\.\d+$;
+    root           /www;
     limit_conn default 10;
      	
     if ( $http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen) )
@@ -78,11 +72,6 @@ server {
             return 403;
      }
 
-    location / {
-        root   /www;
-        index  index.php index.html index.htm;
-    }
-
     location ~ ^/(403|404|405|50x).html {
         root /www/files/ip.com/custom_error_page;
     }
@@ -91,8 +80,10 @@ server {
     if ($request_method = POST) { set $no_cache 1; }
     if ($query_string != "") { set $no_cache 1; }
 
-    location ~ \.php$ {
-        root           /www;
+    location ~ .php$ {
+    	try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	index  index.php index.html index.htm;
         fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
@@ -136,8 +127,10 @@ server {
     if ($request_method = POST) { set $no_cache 1; }
     if ($query_string != "") { set $no_cache 1; }
 
-    location ~ \.php$ {
-        root           /www/phpmyadmin.hosutingu.gq;
+    location ~ .php$ {
+    	try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	index  index.php index.html index.htm;
         fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
