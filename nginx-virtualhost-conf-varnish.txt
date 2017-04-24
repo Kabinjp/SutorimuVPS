@@ -1,0 +1,150 @@
+fastcgi_cache_path /var/cache/nginx levels=1:2 keys_zone=microcache:500m max_size=1000m inactive=60m;
+fastcgi_cache_key "$scheme$request_method$host$request_uri";
+fastcgi_cache_use_stale updating error timeout invalid_header http_500;
+
+server {
+    listen  80;
+    listen   [::]:80 ipv6only=on; ## listen for ipv6
+    listen   443 ssl;
+    listen   [::]:443 ipv6only=on ssl;
+    server_name   ~^(www\.)?(?P<domain>.+)$;
+    root           /www/files/$domain;
+    include /etc/nginx/conf.d/my_domain;
+    include /etc/nginx/bots.d/blockbots.conf;
+    include /etc/nginx/bots.d/ddos.conf;
+    limit_conn default 10;
+    limit_req zone=notabot burst=10 nodelay;
+    	
+    if ( $http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen) )
+     {
+         # return 404;
+         return 403;
+     }
+     ## Block download agents ##
+     if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+            return 403;
+     }
+     ##
+     ## Block some robots ##
+     if ($http_user_agent ~* msnbot|scrapbot|curl|libwww-perl) {
+            return 403;
+     }
+
+    location ~ ^/(403|404|405|50x).html {
+        root /www/files/ip.com/custom_error_page;
+    }
+
+      set $no_cache 0;
+    if ($request_method = POST) { set $no_cache 1; }
+    if ($query_string != "") { set $no_cache 1; }
+
+    location ~ .php$ {
+    	try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	index  index.php index.html index.htm;
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+	fastcgi_cache_bypass $no_cache;
+	fastcgi_no_cache $no_cache;
+	fastcgi_cache microcache;
+	fastcgi_cache_valid 60m;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param HTTP_REFERER $http_referer;
+        include /etc/nginx/fastcgi_params;
+    }
+
+}
+
+server {
+    listen       3083;
+    server_name ~^\d+\.\d+\.\d+\.\d+$;
+    root           /www;
+    limit_conn default 10;
+     	
+    if ( $http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen) )
+     {
+         # return 404;
+         return 403;
+     }
+     ## Block download agents ##
+     if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+            return 403;
+     }
+     ##
+     ## Block some robots ##
+     if ($http_user_agent ~* msnbot|scrapbot) {
+            return 403;
+     }
+
+    location ~ ^/(403|404|405|50x).html {
+        root /www/files/ip.com/custom_error_page;
+    }
+
+      set $no_cache 0;
+    if ($request_method = POST) { set $no_cache 1; }
+    if ($query_string != "") { set $no_cache 1; }
+
+    location ~ .php$ {
+    	try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	index  index.php index.html index.htm;
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+	fastcgi_cache_bypass $no_cache;
+	fastcgi_no_cache $no_cache;
+	fastcgi_cache microcache;
+	fastcgi_cache_valid 60m;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param HTTP_REFERER $http_referer;
+        include /etc/nginx/fastcgi_params;
+    }
+}
+
+server {
+    listen       2084;
+    server_name ~^\d+\.\d+\.\d+\.\d+$;
+    root   /www/phpmyadmin.hosutingu.gq;
+    limit_conn default 10;
+    include /etc/nginx/conf.d/my_domain;
+     	
+    location ~ ^/(403|404|405|50x).html {
+        root /www/files/ip.com/custom_error_page;
+    }
+    
+    if ( $http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen) )
+     {
+         # return 404;
+         return 403;
+     }
+     ## Block download agents ##
+     if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+            return 403;
+     }
+     ##
+     ## Block some robots ##
+     if ($http_user_agent ~* msnbot|scrapbot) {
+            return 403;
+     }
+
+      set $no_cache 0;
+    if ($request_method = POST) { set $no_cache 1; }
+    if ($query_string != "") { set $no_cache 1; }
+
+    location ~ .php$ {
+    	try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	index  index.php index.html index.htm;
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+	fastcgi_cache_bypass $no_cache;
+	fastcgi_no_cache $no_cache;
+	fastcgi_cache microcache;
+	fastcgi_cache_valid 60m;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param HTTP_REFERER $http_referer;
+        include /etc/nginx/fastcgi_params;
+    }
+}
