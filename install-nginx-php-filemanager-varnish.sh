@@ -91,6 +91,7 @@ cat /etc/nginx/nginx.conf;
 mkdir /etc/nginx/sites-available;
 mkdir /etc/nginx/sites-enabled;
 mkdir /usr/share/nginx/virtualhost;
+mkdir /www/files/hostname -i;
 
 wget https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/installnginxblocker.sh;
 sudo chmod +x installnginxblocker.sh;
