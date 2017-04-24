@@ -65,6 +65,7 @@ yum -y install yum-fastestmirror;
 yum -y --enablerepo=remi-php71,epel install php-fpm php-gd php-gmp php-ldap php-bcmath php-apc php-mbstring php-pspell php-tidy php-mcrypt php-opcache php-pdo php-pear php-pecl-apc php-process php-pear-MDB2-Driver-mysqli php-pecl-memcached php-pecl-msgpack php-xml php-litespeed php-pecl-varnish php-intl php-zip php-soap php-imap;
 
 yum -y --enablerepo=nginx install nginx;
+yum --enablerepo=epel install varnish -y;
 
 clear
         echo "----------------------------------------------------------------------------";
@@ -107,6 +108,8 @@ wget --no-check-certificate -O /etc/nginx/proxy_params_static  https://raw.githu
 wget --no-check-certificate -O /etc/nginx/conf.d/my_domain https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/my-domain-config-varnish.txt;
 
 wget --no-check-certificate -O /etc/nginx/fastcgi_params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/fastcgi-params-cache.txt;
+
+wget --no-check-certificate -O /etc/varnish/varnish.params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish.params.txt;
 
 rm -f /etc/nginx/conf.d/example_ssl.conf;
 
