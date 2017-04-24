@@ -141,6 +141,8 @@ service nginx start; chkconfig nginx on;
 service mysqld start; chkconfig mysqld on;
 service php-fpm start; chkconfig php-fpm on;
 	else 
+sudo systemctl restart varnish;
+sudo systemctl enable varnish;
 sudo systemctl start php-fpm;
 sudo systemctl enable php-fpm;
 sudo systemctl start nginx;
