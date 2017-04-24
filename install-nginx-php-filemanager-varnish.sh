@@ -116,6 +116,7 @@ wget --no-check-certificate -O /etc/nginx/fastcgi_params https://raw.githubuserc
 wget --no-check-certificate -O /etc/varnish/varnish.params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish.params.txt;
 
 rm -f /etc/nginx/conf.d/example_ssl.conf;
+rm -f /etc/nginx/conf.d/default.conf;
 
 echo '<?php phpinfo();' | sudo tee /usr/share/nginx/virtualhost/index.php;
 cp -p /etc/hosts /etc/hosts.org;
