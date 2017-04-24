@@ -92,6 +92,10 @@ mkdir /etc/nginx/sites-available;
 mkdir /etc/nginx/sites-enabled;
 mkdir /usr/share/nginx/virtualhost;
 
+wget https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/installnginxblocker.sh;
+sudo chmod +x installnginxblocker.sh;
+sudo ./installnginxblocker.sh;
+
 wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-virtualhost-conf-varnish.txt;
 
 cat /etc/nginx/sites-available/virtualhost.conf;
