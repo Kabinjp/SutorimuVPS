@@ -73,7 +73,7 @@ clear
         echo "----------------------------------------------------------------------------";
 echo -e "\n";
 cp -p /etc/php.ini /etc/php.ini.org;
-wget --no-check-certificate -O /etc/php.ini https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-php-config.txt;
+wget --no-check-certificate -O /etc/php.ini https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-php-config-varnish.txt;
 sed -i -e 's/;date.timezone =/date.timezone = "Asia\/Tokyo"/' /etc/php.ini;
 cp -p /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.org;
 sed -i -e 's/user = apache/user = nginx/' /etc/php-fpm.d/www.conf;
@@ -91,7 +91,7 @@ mkdir /etc/nginx/sites-available;
 mkdir /etc/nginx/sites-enabled;
 mkdir /usr/share/nginx/virtualhost;
 
-wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-virtualhost-conf.txt;
+wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-virtualhost-conf-varnish.txt;
 
 cat /etc/nginx/sites-available/virtualhost.conf;
 ln -s /etc/nginx/sites-available/virtualhost.conf /etc/nginx/sites-enabled/;
