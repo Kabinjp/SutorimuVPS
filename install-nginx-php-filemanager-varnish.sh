@@ -32,7 +32,7 @@ if [ "$arch" = "x86_64" ]; then
 	else 
 	        yum -y install sudo;
 		rpm --import http://ftp.riken.jp/Linux/fedora/epel/RPM-GPG-KEY-EPEL-7;
-		rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/7/x86_64/e/epel-release-7-9.noarch.rpm;
+		rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm;
 		yum -y --enablerepo=remi -y update epel-release;
 		cp -p /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.org;
 		sed -i -e "s/enabled=1/enabled=0/g" /etc/yum.repos.d/epel.repo;
