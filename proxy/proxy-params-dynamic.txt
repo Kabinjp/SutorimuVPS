@@ -1,9 +1,9 @@
 # /**
-#  * @version    1.8.2
+#  * @version    1.8.7
 #  * @package    Engintron for cPanel/WHM
 #  * @author     Fotis Evangelou
 #  * @url        https://engintron.com
-#  * @copyright  Copyright (c) 2010 - 2017 Nuevvo Webware P.C. All rights reserved.
+#  * @copyright  Copyright (c) 2010 - 2018 Nuevvo Webware P.C. All rights reserved.
 #  * @license    GNU/GPL license: https://www.gnu.org/copyleft/gpl.html
 #  */
 
@@ -23,13 +23,13 @@
 # You can also raise "proxy_cache_valid" to the same value (e.g. "1m") to force longer
 # server-side caching.
 # The combination of these settings will have Nginx serve all content without issuing requests
-# to Apache but to refresh its cache.
+# to Apache except only when it's required to refresh its cache.
 set $EXPIRES_FOR_DYNAMIC 1m;
 #############################################################################################
 
 # Allow separate cache entries for mobile devices (smartphones & tables)
 set $MOBILE "";
-if ($http_user_agent ~* "(iPhone|iPod|iPad|Android)") {
+if ($http_user_agent ~* "(iPhone|iPod|iPad|Android|Mobile|Tablet)") {
     set $MOBILE "mobile_";
 }
 
@@ -39,8 +39,12 @@ if ($http_cookie ~* "(joomla_[a-zA-Z0-9_]+|userID|wordpress_[a-zA-Z0-9_]+|wp-pos
     set $EXPIRES_FOR_DYNAMIC 0;
 }
 
-# Invision Power Board (IPB)
+# Invision Community (IPS)
 if ($cookie_member_id ~ "^[1-9][0-9]*$") {
+    set $CACHE_BYPASS_FOR_DYNAMIC 1;
+    set $EXPIRES_FOR_DYNAMIC 0;
+}
+if ($http_cookie ~ "ips4_IPSSessionFront") {
     set $CACHE_BYPASS_FOR_DYNAMIC 1;
     set $EXPIRES_FOR_DYNAMIC 0;
 }
@@ -71,9 +75,9 @@ proxy_ignore_headers   Cache-Control Expires Set-Cookie Vary;
 
 # Force client-side caching for dynamic content (commented by default)
 # See explanation at the top of this file
-#proxy_hide_header      Cache-Control;
-#proxy_hide_header      Expires;
-#proxy_hide_header      Pragma;
-#proxy_hide_header      Set-Cookie;
-#proxy_hide_header      Vary;
-#expires                $EXPIRES_FOR_DYNAMIC;
+#expires               $EXPIRES_FOR_DYNAMIC;
+#proxy_hide_header     Cache-Control;
+#proxy_hide_header     Expires;
+#proxy_hide_header     Pragma;
+#proxy_hide_header     Set-Cookie;
+#proxy_hide_header Vary;
