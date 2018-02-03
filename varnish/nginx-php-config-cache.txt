@@ -54,7 +54,6 @@ default 1;
     keepalive_timeout         20s;
     port_in_redirect  off;
     sendfile        on;
-    #server_names_hash_bucket_size 512;
     server_name_in_redirect  off;
     server_tokens off;
     tcp_nodelay  on;
@@ -67,8 +66,8 @@ default 1;
   ## Real IP Forwarding ##
     set_real_ip_from 127.0.0.1;
 
-  # CloudFlare IPs
-  # List from: https://www.cloudflare.com/ips-v4
+    # CloudFlare IPs
+    # List from: https://www.cloudflare.com/ips-v4
     set_real_ip_from 103.21.244.0/22;
     set_real_ip_from 103.22.200.0/22;
     set_real_ip_from 103.31.4.0/22;
@@ -83,8 +82,7 @@ default 1;
     set_real_ip_from 190.93.240.0/20;
     set_real_ip_from 197.234.240.0/22;
     set_real_ip_from 198.41.128.0/17;
-    set_real_ip_from 199.27.128.0/21;
-  # List from: https://www.cloudflare.com/ips-v6
+    # List from: https://www.cloudflare.com/ips-v6
     set_real_ip_from 2400:cb00::/32;
     set_real_ip_from 2405:8100::/32;
     set_real_ip_from 2405:b500::/32;
@@ -94,7 +92,7 @@ default 1;
     set_real_ip_from 2a06:98c0::/29;
 
   # Replace with correct visitor IP
-    real_ip_header X-Forwarded-For;
+    real_ip_header CF-Connecting-IP;
     real_ip_recursive on;
 
     override_charset off;
@@ -102,14 +100,8 @@ default 1;
     client_header_buffer_size 3m;
     large_client_header_buffers 4 256k;
     send_timeout 2;
-    #server_names_hash_max_size 10240;
-    #proxy_read_timeout 1800s;
     limit_conn_zone $binary_remote_addr zone=default:10m;
-    #limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
-    #limit_conn default 10;
     limit_req_zone $binary_remote_addr zone=notabot:10m rate=5r/s;
-    #limit_req_zone $binary_remote_addr zone=req_limit_per_ip:10m rate=5r/s;
-    #limit_req zone=notabot burst=10 nodelay;
 
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
@@ -127,11 +119,7 @@ default 1;
     
     index index.html index.htm index.php;
 
-    # allow user agents to keep a connection open with us.;
-    #tcp_nopush     on;
-
     keepalive_requests 100000;
-    #worker_rlimit_nofile    20000;
     reset_timedout_connection on;
     
     disable_symlinks if_not_owner from=$document_root;
