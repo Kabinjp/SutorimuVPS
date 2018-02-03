@@ -61,6 +61,7 @@ yum -y install wget;
 yum -y install zip;
 yum -y install unzip;
 yum -y install yum-fastestmirror;
+yum -y install nano;
 
 yum -y --enablerepo=remi-php71,epel install php-fpm php-gd php-gmp php-ldap php-bcmath php-apc php-mbstring php-pspell php-tidy php-mcrypt php-opcache php-pdo php-pear php-pecl-apc php-process php-pear-MDB2-Driver-mysqli php-pecl-memcached php-pecl-msgpack php-xml php-litespeed php-pecl-varnish php-intl php-zip php-soap php-imap;
 
@@ -93,9 +94,15 @@ mkdir /etc/nginx/sites-enabled;
 mkdir /usr/share/nginx/virtualhost;
 mkdir /www/files/hostname -i;
 
-wget https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/installnginxblocker.sh;
-sudo chmod +x installnginxblocker.sh;
-sudo ./installnginxblocker.sh;
+sudo wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker -O /usr/sbin/install-ngxblocker;
+sudo chmod +x /usr/sbin/install-ngxblocker
+cd /usr/sbin
+sudo ./install-ngxblocker
+sudo ./install-ngxblocker -x
+sudo chmod +x /usr/sbin/setup-ngxblocker
+sudo chmod +x /usr/sbin/update-ngxblocker
+sudo ./setup-ngxblocker
+sudo ./setup-ngxblocker -x
 
 wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-virtualhost-conf-varnish.txt;
 
