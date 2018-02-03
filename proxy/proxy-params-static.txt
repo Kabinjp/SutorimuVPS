@@ -1,9 +1,9 @@
 # /**
-#  * @version    1.8.2
+#  * @version    1.8.7
 #  * @package    Engintron for cPanel/WHM
 #  * @author     Fotis Evangelou
 #  * @url        https://engintron.com
-#  * @copyright  Copyright (c) 2010 - 2017 Nuevvo Webware P.C. All rights reserved.
+#  * @copyright  Copyright (c) 2010 - 2018 Nuevvo Webware P.C. All rights reserved.
 #  * @license    GNU/GPL license: https://www.gnu.org/copyleft/gpl.html
 #  */
 
@@ -47,7 +47,7 @@ proxy_hide_header       Vary;
 # Reset headers
 add_header              Pragma "public";
 add_header              Server "Sutorimu";
-add_header              Vary "Accept-Encoding";
+#add_header              Vary "Accept-Encoding";
 
 # Disable logging
-access_log              off;
+access_log off;
