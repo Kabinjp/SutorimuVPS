@@ -1,8 +1,8 @@
 #!/bin/sh
-# Script for automatically install Nginx + PHP(php-fpm) + MySql + phpMyAdmin + filemanager
+# Script for automatically install Nginx + PHP(php-fpm) + not MySql + not phpMyAdmin + filemanager
 
 # Installation Requirement:
-# CentOS 6.x 64 bit / CentOS 7.x 64 bit
+# CentOS 6.x 64 bit not function / CentOS 7.x 64 bit
 # Guarantee Memory >= 256MB, Free Disk space >=2.5GB
 
 clear
@@ -57,7 +57,6 @@ clear
 echo -e "\n";
 # You may want remove first if your server is not a clean OS
 yum -y remove httpd nginx php php-* mysqld;
-yum -y install wget;
 yum -y install zip;
 yum -y install unzip;
 yum -y install yum-fastestmirror;
@@ -75,7 +74,7 @@ clear
         echo "----------------------------------------------------------------------------";
 echo -e "\n";
 cp -p /etc/php.ini /etc/php.ini.org;
-wget --no-check-certificate -O /etc/php.ini https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-php-config-varnish.txt;
+wget --no-check-certificate -O /etc/php.ini https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/nginx-php-config-varnish.txt;
 sed -i -e 's/;date.timezone =/date.timezone = "Asia\/Tokyo"/' /etc/php.ini;
 cp -p /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.org;
 sed -i -e 's/user = apache/user = nginx/' /etc/php-fpm.d/www.conf;
@@ -104,24 +103,30 @@ sudo chmod +x /usr/sbin/update-ngxblocker
 sudo ./setup-ngxblocker
 sudo ./setup-ngxblocker -x
 
-wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-virtualhost-conf-varnish.txt;
+wget --no-check-certificate -O /etc/nginx/sites-available/virtualhost.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish/nginx-virtualhost-conf-varnish-final.txt.txt;
 
 cat /etc/nginx/sites-available/virtualhost.conf;
 ln -s /etc/nginx/sites-available/virtualhost.conf /etc/nginx/sites-enabled/;
 
-wget --no-check-certificate -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-php-config-cache.txt;
+wget --no-check-certificate -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish/nginx-php-config-cache.txt;
 
-wget --no-check-certificate -O /etc/nginx/conf.d/default.conf  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-default-conf.txt;
+wget --no-check-certificate -O /etc/nginx/conf.d/default.conf  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish/nginx-default-conf.txt;
 
-wget --no-check-certificate -O /etc/nginx/proxy_params_common  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy-params-common.txt;
-wget --no-check-certificate -O /etc/nginx/proxy_params_dynamic  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy-params-dynamic.txt;
-wget --no-check-certificate -O /etc/nginx/proxy_params_static  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy-params-static.txt;
+wget --no-check-certificate -O /etc/nginx/proxy_params_common  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy/proxy-params-common.txt;
+wget --no-check-certificate -O /etc/nginx/proxy_params_dynamic https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy/proxy-params-dynamic.txt;
+wget --no-check-certificate -O /etc/nginx/proxy_params_static  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy/proxy-params-static.txt;
 
-wget --no-check-certificate -O /etc/nginx/conf.d/my_domain https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/my-domain-config-varnish.txt;
+wget --no-check-certificate -O /etc/nginx/conf.d/my_domain  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/proxy/my-domain-config.txt;
 
-wget --no-check-certificate -O /etc/nginx/fastcgi_params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/fastcgi-params-cache.txt;
+wget --no-check-certificate -O /etc/nginx/fastcgi_params  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/fastcgi-params-cache.txt;
 
-wget --no-check-certificate -O /etc/varnish/varnish.params https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish.params.txt;
+wget --no-check-certificate -O /etc/varnish/varnish.params  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/varnish/varnish.params.txt;
+
+wget --no-check-certificate -O /etc/nginx/mime.types  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/mime.types.txt;
+
+wget --no-check-certificate -O /etc/nginx/dhparam.pem  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/dhparam.pem;
+
+wget --no-check-certificate -O /etc/nginx/conf.d/bad_bots.conf  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/bad_bots.conf;
 
 rm -f /etc/nginx/conf.d/example_ssl.conf;
 rm -f /etc/nginx/conf.d/default.conf;
@@ -143,7 +148,7 @@ echo "root password is ${pass2}";
 mkdir -p /www/files/ip.com/custom_error_page;
 cd /www;
 
-wget --no-check-certificate -O /www/mysql-and-sftp-password.php  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-mysql-password.html;
+wget --no-check-certificate -O /www/mysql-and-sftp-password.php  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/nginx-mysql-password.html;
 
 sed -i "s/SUTORIMUVPSPASSWORD/${pass2}/g" /www/mysql-and-sftp-password.php;
 
@@ -169,17 +174,19 @@ clear
         echo "-------------| _____________________________________________ |--------------";
         echo "----------------------------------------------------------------------------";
 echo -e "\n";
-wget --no-check-certificate -O /www/files/ip.com/index.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-default-index.html;
-wget --no-check-certificate -O /www/files/ip.com/custom_error_page/404.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-404.html;
-wget --no-check-certificate -O /www/files/ip.com/custom_error_page/403.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-403.html;
-wget --no-check-certificate -O /www/files/ip.com/custom_error_page/50x.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-50x.html;
+wget --no-check-certificate -O /www/files/ip.com/index.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/nginx-default-index.html;
+wget --no-check-certificate -O /www/files/ip.com/custom_error_page/404.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-404.html;
+wget --no-check-certificate -O /www/files/ip.com/custom_error_page/403.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-403.html;
+wget --no-check-certificate -O /www/files/ip.com/custom_error_page/405.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-405.html;
+wget --no-check-certificate -O /www/files/ip.com/custom_error_page/50x.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-50x.html;
 
-wget --no-check-certificate -O /usr/share/nginx/html/404.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-404.html;
-wget --no-check-certificate -O /usr/share/nginx/html/403.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-403.html;
-wget --no-check-certificate -O /usr/share/nginx/html/50x.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-50x.html;
-wget --no-check-certificate -O /usr/share/nginx/html/index.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-default-index.html;
+wget --no-check-certificate -O /usr/share/nginx/html/404.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-404.html;
+wget --no-check-certificate -O /usr/share/nginx/html/405.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-405.html;
+wget --no-check-certificate -O /usr/share/nginx/html/403.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-403.html;
+wget --no-check-certificate -O /usr/share/nginx/html/50x.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/error/nginx-50x.html;
+wget --no-check-certificate -O /usr/share/nginx/html/index.html  https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/nginx-default-index.html;
 
-wget --no-check-certificate -O /etc/php.d/40-apcu.ini https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx-php-apcu-config.txt;
+wget --no-check-certificate -O /etc/php.d/40-apcu.ini https://raw.githubusercontent.com/Kabinjp/SutorimuVPS/master/nginx/nginx-php-apcu-config.txt;
 
 clear
         echo "----------------------------------------------------------------------------";
@@ -192,7 +199,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/Kabinjp/SutorimuVP
 
 #unzip phpMyAdmin-4.6.6-all-languages.zip;
 #rm -f phpMyAdmin-4.6.6-all-languages.zip;
-#mv phpMyAdmin-4.6.6-all-languages phpmyadmin.hosutingu.gq;
+#mv phpMyAdmin-4.6.6-all-languages phpMyAdmin;
 
 unzip FileManager.zip;
 rm -f FileManager.zip;
@@ -203,7 +210,7 @@ sed -i "s/SUTORIMUVPSPASSWORD/${pass2}/g" /www/index.php;
 chmod -R 777 /www/files;
 #chmod +x -R /www/files/ip.com;
 chmod 777 /var/lib/php/session/;
-#rm -Rf phpmyadmin.hosutingu.gq;
+#rm -Rf phpMyAdmin;
 
 clear
         echo "----------------------------------------------------------------------------";
