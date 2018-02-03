@@ -1,14 +1,15 @@
 # /**
-#  * @version    1.8.2
+#  * @version    1.8.7
 #  * @package    Engintron for cPanel/WHM
 #  * @author     Fotis Evangelou
 #  * @url        https://engintron.com
-#  * @copyright  Copyright (c) 2010 - 2017 Nuevvo Webware P.C. All rights reserved.
+#  * @copyright  Copyright (c) 2010 - 2018 Nuevvo Webware P.C. All rights reserved.
 #  * @license    GNU/GPL license: https://www.gnu.org/copyleft/gpl.html
 #  */
 
 # General Proxy Settings
-#proxy_pass                    http://127.0.0.1:80;
+#proxy_pass                    $scheme://localhost;
+proxy_hide_header             Upgrade;
 proxy_http_version            1.1;                # Always upgrade to HTTP/1.1
 proxy_set_header              Accept-Encoding ""; # Optimize encoding
 proxy_set_header              Connection "";      # Enable keepalives
@@ -47,4 +48,4 @@ add_header                    X-Content-Type-Options "nosniff" always;
 
 # Info
 add_header                    X-Nginx-Cache-Status $upstream_cache_status;
-add_header                    X-Server-Powered-By "Sutorimu VPS";
+add_header X-Server-Powered-By "Sutorimu VPS";
