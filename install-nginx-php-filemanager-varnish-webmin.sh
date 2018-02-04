@@ -167,8 +167,8 @@ sudo systemctl start php-fpm;
 sudo systemctl enable php-fpm;
 sudo systemctl start nginx;
 sudo systemctl enable nginx;
-service webmin start;
-chkconfig webmin on;
+sudo systemctl start webmin;
+sudo systemctl enable webmin;
 
 	fi
 fi
@@ -215,7 +215,7 @@ clear
         echo "----------------------------------------------------------------------------";
 
 echo -e "\n";
-echo "====== Nginx + PHP-FPM + FileManager + Varnish Successfully installed";
+echo "====== Nginx + PHP-FPM + FileManager + Varnish + Webmin Successfully installed";
 echo "====== Website document root is /www/files/yourdomain";
 echo "====== FileManager Username is sutorimu";
 echo "====== FileManager Password is ${pass2}";
