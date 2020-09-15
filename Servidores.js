@@ -50,7 +50,7 @@ function FembedServer(url){
       cache: false,
       success: function (data) {    
         var list = { 'PelisPedia' :[] };
-        if (data.data.length > 0) {
+        if (data.data.length >= 1) {
         for (var i = 0; i < data.data.length; i++) {
             var file = data.data[i].file;
             var label = data.data[i].label;
@@ -89,6 +89,6 @@ function Servidores(url){
     if (url.match(/fembed/)) {
         return FembedServer(url);
     } else {
-        return false;
+        return "not_supported";
     }
 }
